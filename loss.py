@@ -38,3 +38,18 @@ def dipole_loss(out,data):
     mse_loss = nn.MSELoss()
     loss = mse_loss(phi, phi_cap)
     return loss
+
+
+def compute_local_field(susc):
+    f_susc = torch.fft.fftn(susc,dim=[2,3,4])
+    matrix_size = [64, 64, 64]
+    voxel_size = [1,  1,  1]
+
+    dk = dipole_kernel(matrix_size, voxel_size, B0_dir=[0, 0, 1])
+    dk=dk.float()
+    dk = torch.unsqueeze(dk, dim=0).cuda()
+    
+    f_res = dk * f_susc
+    phi = torch.real(torch.fft.ifftn(f_res, dim=[2,3,4]))
+
+    return phi

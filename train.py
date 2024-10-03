@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
 
     model = DeepQSM().cuda()
-    model= nn.DataParallel(model)
+    # model= nn.DataParallel(model)
     optimizer = optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)
 
     start_epoch = 0
